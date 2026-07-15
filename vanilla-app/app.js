@@ -2160,6 +2160,9 @@ function showFeedback(isCorrect, lesson, isShowAnswer = false) {
         feedbackArea.textContent = lesson.feedback_success;
         explainText.innerHTML = lesson.detailed_explanation;
         
+        interactiveCanvas.classList.remove('diagram-error');
+        interactiveCanvas.classList.add('diagram-success');
+        
         // Progress bar updates immediately
         const progressPercent = ((currentLessonIndex + 1) / currentCheckpoint.lessons.length) * 100;
         lessonProgress.style.width = `${progressPercent}%`;
@@ -2167,6 +2170,11 @@ function showFeedback(isCorrect, lesson, isShowAnswer = false) {
         feedbackArea.classList.remove('hidden', 'bg-green-900/30', 'text-green-400', 'border-green-800');
         feedbackArea.classList.add('bg-red-900/30', 'text-red-400', 'border', 'border-red-800');
         feedbackArea.textContent = lesson.feedback_fail;
+        
+        interactiveCanvas.classList.remove('diagram-success');
+        interactiveCanvas.classList.remove('diagram-error');
+        void interactiveCanvas.offsetWidth; // force reflow to restart animation
+        interactiveCanvas.classList.add('diagram-error');
     }
 }
 
