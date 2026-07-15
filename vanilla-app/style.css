@@ -258,8 +258,16 @@
     cursor: grab;
     user-select: none;
     transition: transform 0.2s, box-shadow 0.2s;
-    background: #3B82F6;
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
     color: white;
+    border: 1px solid #334155;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.draggable-token.correct-token {
+    background: linear-gradient(135deg, #15803d 0%, #166534 100%) !important;
+    border: 1px solid #22c55e !important;
 }
 
 .draggable-token:active, .is-dragging {
@@ -357,21 +365,15 @@
     box-shadow: none;
 }
 
-/* Draggable Tokens Styling (Dark Theme) */
-.draggable-token {
-    background: #27272A;
-    color: white;
-    border: 2px solid #4B5563;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    user-select: none;
-    cursor: pointer;
+/* Draggable Tokens Hover */
+.draggable-token:hover {
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
 }
 
-.draggable-token:hover {
-    border-color: #3B82F6;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+.draggable-token.token-shape {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .draggable-token.shape-start-circle,

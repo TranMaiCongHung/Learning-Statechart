@@ -297,7 +297,7 @@ function renderCurrentLesson() {
     feedbackArea.className = 'w-full max-w-2xl mt-4 text-center text-lg font-medium hidden p-4 rounded-lg';
     interactiveCanvas.classList.remove('diagram-success', 'diagram-error');
     
-    if (['simulate_atm', 'parallel_sim', 'history_sim', 'boss_sim', 'timeout_loop', 'drag_to_robot'].includes(lesson.interaction.type) || lesson.interaction.type.endsWith('_hook')) {
+    if (['parallel_sim', 'history_sim', 'boss_sim', 'timeout_loop'].includes(lesson.interaction.type) || lesson.interaction.type.endsWith('_hook')) {
         btnCheck.classList.add('hidden');
     }
 }
@@ -431,7 +431,6 @@ function renderInteraction(interaction) {
             <div class="flex flex-col items-center justify-center py-10 w-full">
                 <div class="text-6xl mb-6">💡</div>
                 <div class="text-xl font-medium text-white mb-8 text-center max-w-2xl leading-relaxed">${currentCheckpoint.lessons[currentLessonIndex].theory_text}</div>
-                <div class="text-gray-400 text-sm mt-4 italic">Auto transitioning...</div>
             </div>
         `;
         hookTimeout = setTimeout(() => {
@@ -465,7 +464,10 @@ function renderInteraction(interaction) {
     }
     else if (interaction.type === 'multiple_choice_image') {
         tokensTray.style.display = 'none';
-        interactiveCanvas.innerHTML = `<div class="flex flex-col gap-4 w-full max-w-md" id="mc-container"></div>`;
+        interactiveCanvas.innerHTML = `
+            ${interaction.image_html ? `<div class="w-full flex justify-center mb-6">${interaction.image_html}</div>` : ''}
+            <div class="flex flex-col gap-4 w-full max-w-md" id="mc-container"></div>
+        `;
         const container = document.getElementById('mc-container');
         interaction.options.forEach(opt => {
             const btn = document.createElement('button');
@@ -799,44 +801,6 @@ function renderInteraction(interaction) {
         tokensTray.innerHTML = '';
         ['Playing', 'OFF', 'Paused'].forEach((t, i) => {
             const token = createDraggableToken({ id: 'st' + i, text: t });
-            
-            token.addEventListener('click', () => {
-                const box = document.getElementById('cat-box');
-                const items = document.getElementById('cat-items');
-                const tray = document.getElementById('tokens-tray');
-                
-                if (token.parentElement === items || token.parentElement.dataset?.zoneId === 'composite_on' || token.parentElement.closest('#cat-box')) {
-                    token.className = 'draggable-token flex items-center justify-center shadow-md relative z-10 bg-[#3B82F6] hover:bg-[#2563EB] transition-colors text-white font-semibold cursor-pointer px-6 py-3 rounded-lg animate-pop';
-                    currentInteractionState.compositeItems = (currentInteractionState.compositeItems || []).filter(id => id !== token.dataset.id);
-                    currentInteractionState.categorized = currentInteractionState.compositeItems;
-                    tray.appendChild(createTokenWrapper(token));
-                    
-                    const span = box.querySelector('span.pointer-events-none');
-                    if (currentInteractionState.compositeItems.length === 0 && span) {
-                        span.style.display = 'block';
-                        box.classList.remove('bg-primary/10');
-                    }
-                } else {
-                    token.className = 'draggable-token flex items-center justify-center shadow-md border-2 border-primary bg-[#27272A] text-white font-bold w-24 h-12 rounded-lg cursor-pointer animate-pop';
-                    currentInteractionState.compositeItems = currentInteractionState.compositeItems || [];
-                    if (!currentInteractionState.compositeItems.includes(token.dataset.id)) {
-                        currentInteractionState.compositeItems.push(token.dataset.id);
-                    }
-                    currentInteractionState.categorized = currentInteractionState.compositeItems;
-                    items.appendChild(token);
-                    
-                    const span = box.querySelector('span.pointer-events-none');
-                    if (span) span.style.display = 'none';
-                    box.classList.add('bg-primary/10');
-                }
-                
-                if (currentInteractionState.compositeItems.length >= 2) {
-                    enableCheckButton();
-                } else {
-                    disableCheckButton();
-                }
-            });
-
             tokensTray.appendChild(createTokenWrapper(token));
         });
         currentInteractionState.categorized = [];
@@ -1436,18 +1400,18 @@ function createTokenWrapper(el) {
 }
 function createDraggableToken(token) {
     const el = document.createElement('div');
-    el.className = 'draggable-token flex items-center justify-center shadow-md relative z-10 bg-[#3B82F6] hover:bg-[#2563EB] transition-colors text-white font-semibold px-6 py-3 rounded-lg cursor-pointer active:cursor-grabbing';
+    el.className = 'draggable-token flex items-center justify-center shadow-md relative z-10 transition-colors text-white font-semibold px-6 py-3 rounded-lg cursor-pointer active:cursor-grabbing';
     
     if (token.type === 'initial') {
         el.innerHTML = '<div class="w-6 h-6 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)] pointer-events-none"></div>';
         el.dataset.isInit = 'true';
-        el.classList.remove('px-6', 'py-3', 'bg-[#3B82F6]', 'hover:bg-[#2563EB]');
-        el.classList.add('w-12', 'h-12', 'bg-transparent', 'hover:bg-gray-800');
+        el.classList.remove('px-6', 'py-3');
+        el.classList.add('w-12', 'h-12', 'token-shape');
     } else if (token.type === 'final') {
         el.innerHTML = '<div class="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_10px_rgba(255,255,255,0.5)] pointer-events-none"><div class="w-3 h-3 bg-white rounded-full"></div></div>';
         el.dataset.isFinal = 'true';
-        el.classList.remove('px-6', 'py-3', 'bg-[#3B82F6]', 'hover:bg-[#2563EB]');
-        el.classList.add('w-12', 'h-12', 'bg-transparent', 'hover:bg-gray-800');
+        el.classList.remove('px-6', 'py-3');
+        el.classList.add('w-12', 'h-12', 'token-shape');
     } else {
         el.textContent = token.text;
     }
@@ -1468,11 +1432,11 @@ function setupDragAndDrop() {
         if (!tray) return;
         
         const moveDOM = () => {
-            token.className = 'draggable-token flex items-center justify-center shadow-md relative z-10 hover:bg-[#2563EB] transition-colors text-white font-semibold cursor-pointer active:cursor-grabbing animate-pop';
+            token.className = 'draggable-token flex items-center justify-center shadow-md relative z-10 transition-colors text-white font-semibold cursor-pointer active:cursor-grabbing animate-pop';
             if (token.dataset.isInit === 'true' || token.dataset.isFinal === 'true' || token.dataset.id === 'ha_hist') {
-                token.classList.add('w-12', 'h-12', 'bg-transparent', 'hover:bg-gray-800');
+                token.classList.add('w-12', 'h-12', 'token-shape');
             } else {
-                token.classList.add('px-6', 'py-3', 'bg-[#3B82F6]', 'rounded-lg');
+                token.classList.add('px-6', 'py-3', 'rounded-lg');
             }
             if (token.parentElement && token.parentElement.dataset.zoneId === 'comp_zone') {
                 currentInteractionState.compositeItems = (currentInteractionState.compositeItems || []).filter(id => id !== token.dataset.id);
@@ -1721,8 +1685,7 @@ function setupDragAndDropCategory(interaction) {
                 wrapper.style.width = '0px'; wrapper.style.margin = '0px'; wrapper.style.opacity = '0';
                 setTimeout(() => wrapper.remove(), 300);
 
-                token.classList.remove('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
-                token.classList.add('bg-surface', 'border-2', 'border-lineDark');
+                token.classList.add('border-2', 'border-lineDark');
                 token.style.transform = 'scale(1.1)';
                 setTimeout(() => token.style.transform = 'scale(1)', 200);
 
@@ -1732,8 +1695,7 @@ function setupDragAndDropCategory(interaction) {
                 enableCheckButton();
             } else if (token.parentElement.id === 'cat-items') {
                 currentInteractionState.categorized = currentInteractionState.categorized.filter(id => id !== token.dataset.id);
-                token.classList.remove('bg-surface', 'border-2', 'border-lineDark', 'bg-red-900/50', 'border-red-500', 'bg-green-700', 'border-green-400');
-                token.classList.add('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
+                token.classList.remove('border-2', 'border-lineDark', 'bg-red-900/50', 'border-red-500', 'correct-token');
                 const wrapper = createTokenWrapper(token);
                 tray.appendChild(wrapper);
                 if (currentInteractionState.categorized.length === 0) disableCheckButton();
@@ -1755,8 +1717,7 @@ function setupDragAndDropCategory(interaction) {
                 return;
             }
             itemsContainer.appendChild(draggedElement);
-            draggedElement.classList.remove('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
-            draggedElement.classList.add('bg-surface', 'border-2', 'border-lineDark');
+            draggedElement.classList.add('border-2', 'border-lineDark');
             draggedElement.style.transform = 'scale(1.1)';
             setTimeout(() => draggedElement.style.transform = 'scale(1)', 200);
 
@@ -1772,8 +1733,7 @@ function setupDragAndDropCategory(interaction) {
         e.preventDefault();
         if (draggedElement && draggedElement.parentElement.id === 'cat-items') {
             currentInteractionState.categorized = currentInteractionState.categorized.filter(id => id !== draggedElement.dataset.id);
-            draggedElement.classList.remove('bg-surface', 'border-2', 'border-lineDark', 'bg-red-900/50', 'border-red-500', 'bg-green-700', 'border-green-400');
-            draggedElement.classList.add('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
+            draggedElement.classList.remove('border-2', 'border-lineDark', 'bg-red-900/50', 'border-red-500', 'correct-token');
             
             const wrapper = createTokenWrapper(draggedElement);
             tray.appendChild(wrapper);
@@ -1951,7 +1911,7 @@ function checkAnswer() {
             isCorrect = true;
             Array.from(document.getElementById('cat-items').children).forEach(el => {
                 el.classList.remove('bg-surface', 'border-lineDark');
-                el.classList.add('bg-green-700', 'border-green-400');
+                el.classList.add('correct-token');
             });
         }
     }
@@ -2061,7 +2021,7 @@ function checkAnswer() {
             isCorrect = true;
             Array.from(document.getElementById('cat-items').children).forEach(el => {
                 el.classList.remove('bg-surface', 'border-lineDark');
-                el.classList.add('bg-green-700', 'border-green-400');
+                el.classList.add('correct-token');
             });
         } else {
             isCorrect = false;
@@ -2201,13 +2161,14 @@ function handleShowAnswer() {
         zone.classList.replace('border-dashed', 'border-solid');
         zone.classList.replace('border-lineDark', 'border-green-500');
         zone.classList.add('bg-green-900/30');
-        zone.innerHTML = `<div class="draggable-token w-full h-full flex items-center justify-center shadow-md relative z-10 bg-green-700 border-2 border-green-400 text-white font-semibold rounded-lg">Wake Up</div>`;
+        zone.innerHTML = `<div class="draggable-token w-full h-full flex items-center justify-center shadow-md relative z-10 correct-token text-white font-semibold rounded-lg">Wake Up</div>`;
         tokensTray.innerHTML = '';
     }
     else if (interaction.type === 'categorize_states') {
         const itemsContainer = document.getElementById('cat-items');
+        itemsContainer.innerHTML = '';
         interaction.draggable_tokens.filter(t => t.isState).forEach(t => {
-            itemsContainer.innerHTML += `<div class="draggable-token flex items-center justify-center shadow-md relative z-10 bg-green-700 border-2 border-green-400 text-white font-semibold px-6 py-3 rounded-lg">${t.text}</div>`;
+            itemsContainer.innerHTML += `<div class="draggable-token flex items-center justify-center shadow-md relative z-10 correct-token text-white font-semibold px-6 py-3 rounded-lg">${t.text}</div>`;
         });
         tokensTray.innerHTML = '';
     }

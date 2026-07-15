@@ -194,9 +194,24 @@ export const appData = {
                             theory_text: "Which State will the user start at?",
                             interaction: { 
                                 type: "multiple_choice_image",
+                                image_html: `
+                                    <div class="flex items-center gap-6 relative w-full justify-center transform scale-[0.8] mt-4">
+                                        <div class="relative w-16 h-16 flex items-center justify-center">
+                                            <div class="w-12 h-12 rounded-full border-2 border-green-500 bg-green-900/30 flex items-center justify-center">
+                                                <div class="w-6 h-6 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                                            </div>
+                                        </div> 
+                                        <div class="w-8 h-0.5 bg-white opacity-80 relative"><div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-white rotate-45"></div></div>
+                                        <div class="border-2 border-primary bg-[#27272A] flex items-center justify-center text-white font-bold z-10 w-24 h-12 rounded-lg shadow-lg">State A</div>
+                                        <div class="relative w-16 h-0.5 bg-white opacity-80">
+                                            <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-white rotate-45"></div>
+                                        </div>
+                                        <div class="border-2 border-primary bg-[#27272A] flex items-center justify-center text-white font-bold z-10 w-24 h-12 rounded-lg shadow-lg">State B</div>
+                                    </div>
+                                `,
                                 options: [
-                                    { id: "opt1", text: "[Cart]" },
-                                    { id: "opt2", text: "[Checkout]" }
+                                    { id: "opt1", text: "[State A]" },
+                                    { id: "opt2", text: "[State B]" }
                                 ],
                                 correct_id: "opt1"
                             },
