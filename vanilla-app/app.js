@@ -1,3 +1,5 @@
+import { appData } from './data.js';
+
 // Initial State
 let state = {
     unlockedCheckpoints: JSON.parse(localStorage.getItem('unlockedCheckpoints')) || ['cp1'],

@@ -1,4 +1,4 @@
-const appData = {
+export const appData = {
     curriculum: [
         {
             id: "level1",
@@ -531,6 +531,4 @@ const appData = {
     ]
 };
 
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = appData;
-}
+
