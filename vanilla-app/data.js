@@ -392,8 +392,8 @@ export const appData = {
                             feedback_fail: "You must distribute Guards for both arrows."
                         },
                         {
-                            title: "Fix Combo Bug",
-                            theory_text: "Fix 2 errors: Remove 1 extra Initial Node, remove the outgoing arrow from the Final State.",
+                            title: "Multi-Bug Fix",
+                            theory_text: "Identify and delete the 2 invalid arrows. Remember: There is only 1 starting point, and a Final State cannot transition to anywhere else.",
                             interaction: { type: "repair_multi" },
                             feedback_success: "Outstanding! You passed the bug fixing test.",
                             detailed_explanation: "Very good! Reviewing logic errors is an extremely important skill.",

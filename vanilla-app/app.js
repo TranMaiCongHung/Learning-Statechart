@@ -938,13 +938,13 @@ function renderInteraction(interaction) {
             <div class="flex items-center justify-center gap-6 w-full mb-8 relative">
                 <div class="border-2 border-red-500 bg-red-900 w-16 h-16 rounded-full flex items-center justify-center text-white font-bold shadow-[0_0_15px_rgba(239,68,68,0.8)]">Red</div>
                 <div class="text-gray-500 text-xs">➔</div>
-                <div class="border-2 border-green-500 bg-[#121212] w-16 h-16 rounded-full flex items-center justify-center text-gray-500 font-bold">Xanh</div>
+                <div class="border-2 border-green-500 bg-[#121212] w-16 h-16 rounded-full flex items-center justify-center text-gray-500 font-bold">Green</div>
                 <div class="text-gray-500 text-xs">➔</div>
                 <div class="border-2 border-yellow-500 bg-[#121212] w-16 h-16 rounded-full flex items-center justify-center text-gray-500 font-bold">Yellow</div>
             </div>
             <div class="flex gap-4 w-full justify-center">
                 <button class="box-tag w-24 py-3" data-id="Red">Red</button>
-                <button class="box-tag w-24 py-3" data-id="Xanh">Xanh</button>
+                <button class="box-tag w-24 py-3" data-id="Green">Green</button>
                 <button class="box-tag w-24 py-3" data-id="Yellow">Yellow</button>
             </div>
         `;
@@ -992,7 +992,7 @@ function renderInteraction(interaction) {
                             <polygon points="0 0, 10 3.5, 0 7" fill="#94A3B8" />
                         </marker>
                     </defs>
-                    <!-- Mũi tên ban đầu đã được xóa theo yêu cầu -->
+                    <!-- The original arrow has been removed as requested -->
                     <path id="active-line" d="" stroke="#3B82F6" stroke-width="3" stroke-dasharray="5,5" fill="none" marker-end="url(#arrowhead)" class="hidden"/>
                     <path id="drawn-line" d="" stroke="#94A3B8" stroke-width="3" fill="none" marker-end="url(#arrowhead)" class="hidden"/>
                 </svg>
@@ -1016,15 +1016,15 @@ function renderInteraction(interaction) {
 
         interactiveCanvas.innerHTML = `
             <div class="relative w-full h-[250px] flex items-center justify-center gap-16">
-                <div class="border-2 border-primary bg-[#27272A] w-24 h-12 flex items-center justify-center text-white font-bold rounded-lg absolute left-10">Tung Xu</div>
+                <div class="border-2 border-primary bg-[#27272A] w-24 h-12 flex items-center justify-center text-white font-bold rounded-lg absolute left-10">Coin Flip</div>
                 <div class="border-2 border-primary bg-[#27272A] w-24 h-12 flex items-center justify-center text-white font-bold rounded-lg absolute right-10 top-10">Win</div>
-                <div class="border-2 border-primary bg-[#27272A] w-24 h-12 flex items-center justify-center text-white font-bold rounded-lg absolute right-10 bottom-10">Thua</div>
+                <div class="border-2 border-primary bg-[#27272A] w-24 h-12 flex items-center justify-center text-white font-bold rounded-lg absolute right-10 bottom-10">Lose</div>
                 
                 <div class="absolute left-[130px] top-[60px] w-32 h-[2px] bg-white opacity-80 transform rotate-[-20deg]"></div>
                 <div class="absolute left-[130px] bottom-[60px] w-32 h-[2px] bg-white opacity-80 transform rotate-[20deg]"></div>
                 
-                <div id="drop1" data-zone-id="z1" class="drop-zone absolute left-[180px] top-[20px] min-w-[80px] h-10 border-2 border-dashed border-gray-500 bg-[#121212]/80 flex items-center justify-center rounded"></div>
-                <div id="drop2" data-zone-id="z2" class="drop-zone absolute left-[180px] bottom-[20px] min-w-[80px] h-10 border-2 border-dashed border-gray-500 bg-[#121212]/80 flex items-center justify-center rounded"></div>
+                <div id="drop1" data-zone-id="z1" class="drop-zone absolute left-[180px] top-0 min-w-[80px] h-10 border-2 border-dashed border-gray-500 bg-[#121212]/80 flex items-center justify-center rounded"></div>
+                <div id="drop2" data-zone-id="z2" class="drop-zone absolute left-[180px] bottom-0 min-w-[80px] h-10 border-2 border-dashed border-gray-500 bg-[#121212]/80 flex items-center justify-center rounded"></div>
             </div>
         `;
         setupDragAndDrop();
@@ -1032,7 +1032,7 @@ function renderInteraction(interaction) {
     else if (interaction.type === 'repair_multi') {
         tokensTray.style.display = 'none';
         interactiveCanvas.innerHTML = `
-            <div class="text-textMuted mb-2 italic">Click the wrong arrow to delete.</div>
+            <div class="text-textMuted mb-2 italic">Click on the incorrect arrows to delete them.</div>
             <div id="svg-container" class="relative w-full h-[250px] flex items-center justify-center gap-16">
                 <svg id="draw-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible">
                     <defs>
@@ -2109,6 +2109,19 @@ function checkAnswer() {
     else if (interaction.type === 'boss_states') {
         const s = currentInteractionState.selectedStates || [];
         isCorrect = s.includes('idle') && s.includes('coin') && s.includes('dispense');
+        if (isCorrect) {
+            document.querySelectorAll('#state-select-container .box-tag.selected').forEach(btn => {
+                btn.classList.add('border-green-500', 'bg-green-900/30');
+                btn.classList.remove('border-primary', 'bg-primary/20');
+            });
+        } else {
+            document.querySelectorAll('#state-select-container .box-tag.selected').forEach(btn => {
+                if (!['idle', 'coin', 'dispense'].includes(btn.dataset.id)) {
+                    btn.classList.add('animate-shake', 'border-red-500', 'bg-red-900/30');
+                    setTimeout(() => btn.classList.remove('animate-shake', 'border-red-500', 'bg-red-900/30'), 800);
+                }
+            });
+        }
     }
     else if (interaction.type === 'parallel_initial') {
         isCorrect = currentInteractionState.droppedZone === 'zone_bold' || currentInteractionState.droppedZone === 'zone_italic';
@@ -2189,6 +2202,17 @@ function handleShowAnswer() {
             itemsContainer.innerHTML += `<div class="draggable-token flex items-center justify-center shadow-md relative z-10 bg-green-700 border-2 border-green-400 text-white font-semibold px-6 py-3 rounded-lg">${t.text}</div>`;
         });
         tokensTray.innerHTML = '';
+    }
+    else if (interaction.type === 'boss_states') {
+        document.querySelectorAll('#state-select-container .box-tag').forEach(btn => {
+            if (['idle', 'coin', 'dispense'].includes(btn.dataset.id)) {
+                btn.classList.add('selected', 'border-green-500', 'bg-green-900/30');
+                btn.classList.remove('border-primary', 'bg-primary/20', 'bg-surface', 'border-lineDark');
+            } else {
+                btn.classList.remove('selected', 'border-primary', 'bg-primary/20', 'border-green-500', 'bg-green-900/30');
+                btn.classList.add('bg-surface', 'border-lineDark');
+            }
+        });
     }
     else if (interaction.type === 'connect_nodes' || interaction.type === 'repair_transition') {
         const svg = document.getElementById('draw-svg');
