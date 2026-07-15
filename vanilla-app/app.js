@@ -120,6 +120,20 @@ function renderProgressMap() {
                 diskClass = 'disk-active';
                 innerHTML = `
                     <div class="disk-node"></div>
+                    <div class="floating-icon">
+                        <svg width="100%" height="100%" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 25 110 C 20 140 30 155 40 145 C 35 135 40 120 50 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 95 110 C 100 140 90 155 80 145 C 85 135 80 120 70 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 10 75 A 50 50 0 0 1 110 75 C 110 100 120 125 115 135 C 105 145 95 125 90 110 C 90 130 85 150 75 145 C 65 140 70 120 65 105 C 60 120 55 140 45 145 C 35 150 30 130 30 110 C 25 125 15 145 5 135 C 0 125 10 100 10 75 Z" fill="#F59E0B" stroke="#121212" stroke-width="10" stroke-linejoin="round"/>
+                            <circle cx="35" cy="85" r="9" fill="#121212"/>
+                            <circle cx="32" cy="82" r="3" fill="#FFFFFF"/>
+                            <circle cx="85" cy="85" r="9" fill="#121212"/>
+                            <circle cx="82" cy="82" r="3" fill="#FFFFFF"/>
+                            <ellipse cx="20" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
+                            <ellipse cx="100" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
+                            <path d="M 55 90 Q 60 96 65 90" fill="none" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                 `;
             }
 
@@ -165,7 +179,6 @@ function selectCheckpoint(cpId) {
     startBarTitle.textContent = currentCheckpoint.title;
     startBar.classList.add('start-bar-open');
     
-    document.querySelectorAll('.floating-icon').forEach(el => el.remove());
     document.querySelectorAll('.disk-active-override').forEach(el => el.classList.remove('disk-active-override'));
     
     const activeDisk = document.querySelector(`.disk-container[data-id="${cpId}"]`);
@@ -173,21 +186,6 @@ function selectCheckpoint(cpId) {
         if (state.completedCheckpoints.includes(cpId)) {
             activeDisk.classList.add('disk-active-override');
         }
-        const icon = document.createElement('div');
-        icon.className = 'floating-icon';
-        icon.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 25 110 C 20 140 30 155 40 145 C 35 135 40 120 50 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M 95 110 C 100 140 90 155 80 145 C 85 135 80 120 70 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M 10 75 A 50 50 0 0 1 110 75 C 110 100 120 125 115 135 C 105 145 95 125 90 110 C 90 130 85 150 75 145 C 65 140 70 120 65 105 C 60 120 55 140 45 145 C 35 150 30 130 30 110 C 25 125 15 145 5 135 C 0 125 10 100 10 75 Z" fill="#F59E0B" stroke="#121212" stroke-width="10" stroke-linejoin="round"/>
-            <circle cx="35" cy="85" r="9" fill="#121212"/>
-            <circle cx="32" cy="82" r="3" fill="#FFFFFF"/>
-            <circle cx="85" cy="85" r="9" fill="#121212"/>
-            <circle cx="82" cy="82" r="3" fill="#FFFFFF"/>
-            <ellipse cx="20" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
-            <ellipse cx="100" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
-            <path d="M 55 90 Q 60 96 65 90" fill="none" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
-        </svg>`;
-        activeDisk.appendChild(icon);
     }
 }
 
