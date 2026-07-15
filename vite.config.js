@@ -1,14 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path' // <-- ĐẢM BẢO CÓ DÒNG NÀY
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),       // Trang chủ React
-        vanilla: resolve(__dirname, 'vanilla-app/index.html'), // Trang Vanilla JS
+        main: resolve(__dirname, 'index.html'),
+        vanilla: resolve(__dirname, 'vanilla-app/index.html'),
       },
     },
   },
