@@ -49,6 +49,10 @@ const expMsg = document.getElementById('exp-msg');
 const expParticles = document.getElementById('exp-particles');
 const expOctopus = document.getElementById('exp-octopus');
 
+// Landing View
+const landingView = document.getElementById('landing-view');
+const btnEnterApp = document.getElementById('btn-enter-app');
+
 // Initialize App
 function init() {
     renderProgressMap();
@@ -200,6 +204,12 @@ function setupEventListeners() {
     btnStartCheckpoint.addEventListener('click', () => {
         if(currentCheckpoint) startTransitionToLesson();
     });
+    if (btnEnterApp) {
+        btnEnterApp.addEventListener('click', () => {
+            if (landingView) landingView.classList.replace('view-active', 'view-hidden');
+            homeView.classList.replace('view-hidden', 'view-active');
+        });
+    }
     btnExplain.addEventListener('click', () => {
         explainModal.classList.replace('view-hidden', 'view-active');
     });

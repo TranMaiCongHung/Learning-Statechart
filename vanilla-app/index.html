@@ -81,8 +81,62 @@
         <span class="text-white font-bold text-lg" id="exp-amount">0</span>
     </div>
 
+    <!-- LANDING VIEW -->
+    <div id="landing-view" class="w-full h-full flex items-center justify-center view-active absolute inset-0 z-50 transition-opacity duration-500">
+        <div class="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center p-8 gap-12 lg:gap-24 relative z-10">
+            <!-- Left Side -->
+            <div class="flex-1 flex flex-col items-center text-center">
+                <div class="w-48 h-64 mb-8 drop-shadow-[0_0_30px_rgba(245,158,11,0.4)] filter animate-bounce" style="animation-duration: 3s;">
+                    <svg class="swim-pulse" width="100%" height="100%" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 25 110 C 20 140 30 155 40 145 C 35 135 40 120 50 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 95 110 C 100 140 90 155 80 145 C 85 135 80 120 70 110" fill="#D97706" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 10 75 A 50 50 0 0 1 110 75 C 110 100 120 125 115 135 C 105 145 95 125 90 110 C 90 130 85 150 75 145 C 65 140 70 120 65 105 C 60 120 55 140 45 145 C 35 150 30 130 30 110 C 25 125 15 145 5 135 C 0 125 10 100 10 75 Z" fill="#F59E0B" stroke="#121212" stroke-width="10" stroke-linejoin="round"/>
+                        <circle cx="35" cy="85" r="9" fill="#121212"/>
+                        <circle cx="32" cy="82" r="3" fill="#FFFFFF"/>
+                        <circle cx="85" cy="85" r="9" fill="#121212"/>
+                        <circle cx="82" cy="82" r="3" fill="#FFFFFF"/>
+                        <ellipse cx="20" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
+                        <ellipse cx="100" cy="92" rx="8" ry="5" fill="#EF4444" opacity="0.5"/>
+                        <path d="M 55 90 Q 60 96 65 90" fill="none" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1 class="text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-tight">
+                    Become a<br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Statechart</span><br/>
+                    Master!
+                </h1>
+                <p class="text-lg lg:text-xl text-blue-200/80 max-w-md leading-relaxed font-medium">
+                    Master the art of reactive system design through UML Statecharts with visual and interactive drag-and-drop exercises.
+                </p>
+            </div>
+            
+            <!-- Right Side -->
+            <div class="flex-1 flex flex-col items-start bg-gradient-to-b from-[#1E1E24] to-[#121212] p-10 lg:p-12 rounded-[32px] border border-[#27272A] backdrop-blur-md shadow-2xl w-full max-w-md">
+                <h2 class="text-4xl font-extrabold text-white mb-3 tracking-tight">UML Statecharts</h2>
+                <p class="text-gray-400 text-lg mb-10">Master the art of reactive system design</p>
+                
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Total Lessons</div>
+                        <div class="text-white font-bold text-lg" id="landing-progress-text">9 lessons</div>
+                    </div>
+                </div>
+                
+                <button id="btn-enter-app" class="w-full bg-primary hover:bg-primaryHover text-white font-bold py-5 rounded-2xl text-xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 group">
+                    Start
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- HOME VIEW -->
-    <div id="home-view" class="w-full max-w-6xl h-full flex flex-col md:flex-row relative view-active transition-opacity duration-500">
+    <div id="home-view" class="w-full max-w-6xl h-full flex flex-col md:flex-row relative view-hidden transition-opacity duration-500">
         <!-- Left Pane: Course Info Card -->
         <aside class="w-full md:w-5/12 p-6 lg:p-10 flex-shrink-0 z-20 hidden md:block">
             <div class="bg-gradient-to-b from-[#1E1E24] to-[#121212] rounded-[32px] border border-[#27272A] p-8 shadow-2xl shadow-blue-900/10 sticky top-10">
